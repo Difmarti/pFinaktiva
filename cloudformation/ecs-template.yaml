@@ -44,7 +44,7 @@ Resources:
       Memory: 512
       ContainerDefinitions:
         - Name: my-container
-          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/my-ecr-repo:latest"
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/finak-ecr-repo:latest"
           Essential: true
           PortMappings:
             - ContainerPort: 80
