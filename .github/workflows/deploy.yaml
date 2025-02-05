@@ -55,3 +55,30 @@ jobs:
             --parameter-overrides VPCId=${{ env.VPC_ID }} file://$${{ env.PARAMS_DIR }}/sg-params.json \
             --no-fail-on-empty-changeset \
             --capabilities CAPABILITY_NAMED_IAM
+
+      - name: Deploy CloudFormation Stack for ALB
+        run: |
+          aws cloudformation deploy \
+            --template-file ${{ env.CLOUDFORMATION_TEMPLATES_DIR }}/alb-template.yaml \
+            --stack-name finaktiva-alb-stack-${{ matrix.environment }} \
+            --parameter-overrides file://$${{ env.PARAMS_DIR }}/alb-params.json \
+            --no-fail-on-empty-changeset \
+            --capabilities CAPABILITY_NAMED_IAM
+
+      - name: Deploy CloudFormation Stack for ECR
+        run: |
+          aws cloudformation deploy \
+            --template-file ${{ env.CLOUDFORMATION_TEMPLATES_DIR }}/ecr-template.yaml \
+            --stack-name finaktiva-ecr-stack-${{ matrix.environment }} \
+            --parameter-overrides file://$${{ env.PARAMS_DIR }}/ecr-params.json \
+            --no-fail-on-empty-changeset \
+            --capabilities CAPABILITY_NAMED_IAM
+
+      - name: Deploy CloudFormation Stack for ECS
+        run: |
+          aws cloudformation deploy \
+            --template-file ${{ env.CLOUDFORMATION_TEMPLATES_DIR }}/ecs-template.yaml \
+            --stack-name finaktiva-ecs-stack-${{ matrix.environment }} \
+            --parameter-overrides file://$${{ env.PARAMS_DIR }}/ecs-params.json \
+            --no-fail-on-empty-changeset \
+            --capabilities CAPABILITY_NAMED_IAM

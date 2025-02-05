@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create an ECS cluster and services
+
+Parameters:
+  ClusterName:
+    Type: String
+    Description: Name of the ECS cluster
+  DesiredCount:
+    Type: Number
+    Description: Desired number of tasks
+
+Resources:
+  pFinakECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Ref ClusterName
+
+  MyECSService:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref pFinakECSCluster
+      DesiredCount: !Ref DesiredCount
+      TaskDefinition: !Ref rTaskDefinition
+      LoadBalancers:
+        - ContainerName: Finak-container
+          ContainerPort: 80
+          TargetGroupArn: !Ref pFinakALB
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups:
+            - !Ref pFinakSecurityGroup
+          Subnets:
+            - !Ref PublicSubnet
+
+  rTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: Finak-task-family
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: 256
+      Memory: 512
+      ContainerDefinitions:
+        - Name: my-container
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/my-ecr-repo:latest"
+          Essential: true
+          PortMappings:
+            - ContainerPort: 80
+              HostPort: 80
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: /ecs/my-log-group
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: ecs
