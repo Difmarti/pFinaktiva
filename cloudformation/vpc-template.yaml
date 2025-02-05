@@ -29,7 +29,9 @@ Resources:
       VpcId: !Ref pFinakVPC
       CidrBlock: !Ref PublicSubnetCidr
       MapPublicIpOnLaunch: true
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs ''
       Tags:
         - Key: Name
           Value: PublicSubnet
@@ -39,7 +41,9 @@ Resources:
     Properties:
       VpcId: !Ref pFinakVPC
       CidrBlock: !Ref PrivateSubnetCidr
-      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs ''
       Tags:
         - Key: Name
           Value: PrivateSubnet
@@ -47,4 +51,4 @@ Resources:
 Outputs:
   VPCId:
     Value: !Ref pFinakVPC
-    Export:
+    Export: null
