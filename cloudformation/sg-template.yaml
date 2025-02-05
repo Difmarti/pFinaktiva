@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create a Security Group
+
+Parameters:
+  AllowedIPs:
+    Type: CommaDelimitedList
+    Description: List of allowed IPs
+  VPCId:
+    Type: String
+    Description: ID del VPC donde se creará el Security Group
+
+Resources:
+  pFinakSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP and HTTPS traffic
+      VpcId: !Ref VPCId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: !Join [ "/", [ !Select [ 0, !Ref AllowedIPs ], 32 ] ]
+      Tags:
+        - Key: Name
+          Value: FinaktivaSecurityGroup
