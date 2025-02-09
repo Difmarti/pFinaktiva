@@ -38,6 +38,6 @@ desventajas de estos.
  Rta: 
   Round Robin: Permite hacer cargas equilibradas entre los servidores asociados, cluster de alta disponibilidad con un rto bajo.
   Round Robin Weight: Se configura los servidores con porcentaje de peso distinto para que distribuya las cargas segun el performance del servidor es decir un 60% 40% se utiliza cuando los servidores no tiene la misma capacidad.
-  Source:  Mantiene la sesion activa del usuario durante toda la operacion, necesario segun el tipo de aplicacion.
+  Source:  Balancea segun la direcion origen de la peticion, re enviando el trafico siempre a los mismos servidores segun el origen , necesario segun el tipo de aplicacion.
   least connection: Balancea dependiendo de las conexiones activas, por lo cual monitorea las conexiones en cada servidor.
   URI: Balancea segun el la url o destino de url que uno especifique util para  en el caso de que de que se tenga uun solo sominio y sequiera apuntar a dos  servidores internos  distintos. 
